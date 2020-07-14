@@ -1,0 +1,16 @@
+sniff:
+  listen:
+    ip: 172.0.0.1
+    index: 0
+
+  producer:
+    prefix: producer
+    core-pool-size: 10
+    max-pool-size: 50
+    capacity: 100
+
+  consumer:
+    prefix: consumer
+    core-pool-size: 10
+    max-pool-size: 50
+    capacity: 100
