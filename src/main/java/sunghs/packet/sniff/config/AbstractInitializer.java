@@ -11,4 +11,6 @@ public abstract class AbstractInitializer {
         log.debug(instance.toString());
         log.debug("{} end", className);
     }
+
+    protected abstract void initialize();
 }

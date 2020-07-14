@@ -4,7 +4,7 @@
 logging:
   level:
     org: info
-    sunghs: info
+    sunghs: debug
   file:
     name: /logs/sniff.log
     max-size: 100MB
@@ -17,3 +17,27 @@ logging:
 ########################################
 # DATASOURCE CONFIG
 ########################################
+
+
+########################################
+# SNIFF CUSTOM CONFIG
+########################################
+sniff:
+  listen:
+    ip: 172.0.0.1
+    index: 0
+
+########################################
+# THREAD CONFIG
+########################################
+thread:
+  producer:
+    prefix: producer
+    core-pool-size: 10
+    max-pool-size: 50
+    capacity: 100
+  consumer:
+    prefix: consumer
+    core-pool-size: 10
+    max-pool-size: 50
+    capacity: 100
