@@ -1,5 +1,6 @@
 package sunghs.packet.sniff.config;
 
+import java.util.concurrent.Executor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -8,9 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import sunghs.packet.sniff.model.ThreadProperty;
-
-import javax.annotation.PostConstruct;
-import java.util.concurrent.Executor;
 
 @ConfigurationProperties(prefix = "thread")
 @Configuration
@@ -23,7 +21,7 @@ public class ThreadPoolConfig extends AbstractInitializer {
     @Setter
     private ThreadProperty consumer;
 
-    @PostConstruct
+    @Override
     public void initialize() {
         super.check(ThreadPoolConfig.class, this);
     }

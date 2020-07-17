@@ -6,8 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
-
 @ConfigurationProperties(prefix = "sniff.listen")
 @Configuration
 @Slf4j
@@ -19,7 +17,7 @@ public class SniffConfig extends AbstractInitializer {
     @Setter
     private int index;
 
-    @PostConstruct
+    @Override
     public void initialize() {
         super.check(SniffConfig.class, this);
     }
