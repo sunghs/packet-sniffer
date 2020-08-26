@@ -25,6 +25,9 @@ dependencies {
     implementation('org.apache.kafka:kafka-streams')
     implementation('org.projectlombok:lombok')
 
+    implementation('org.pcap4j:pcap4j-core:1.8.2')
+    implementation('org.pcap4j:pcap4j-packetfactory-static:1.8.2')
+
     annotationProcessor('org.springframework.boot:spring-boot-configuration-processor')
     annotationProcessor('org.projectlombok:lombok')
 
