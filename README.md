@@ -8,7 +8,7 @@ side project packet-sniffer
 ## 개발환경 (Dev Environment)
 - IDE : IntelliJ 2020.01
 - JDK : Amazon-corretto-11
-- SpringBoot : 2.3.1
+- SpringBoot : 2.3.2
 - Gradle : 6.4.1
 
 입니다.
