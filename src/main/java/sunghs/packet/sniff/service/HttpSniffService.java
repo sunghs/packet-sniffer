@@ -2,7 +2,7 @@ package sunghs.packet.sniff.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.pcap4j.core.PcapNetworkInterface;
+import org.pcap4j.core.PcapNativeException;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class HttpSniffService {
 
-    private final PcapNetworkInterface pcapNetworkInterface;
-
-    public void sniff() {
+    public void sniff() throws PcapNativeException {
 
     }
 }

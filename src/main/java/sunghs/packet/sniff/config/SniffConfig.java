@@ -4,12 +4,14 @@ import java.util.List;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.Pcaps;
 import org.pcap4j.util.NifSelector;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import sunghs.packet.sniff.constant.SniffConstant;
 
 @ConfigurationProperties(prefix = "sniff.listen")
 @Configuration
@@ -31,7 +33,7 @@ public class SniffConfig extends AbstractInitializer {
     }
 
     @Bean
-    public PcapNetworkInterface pcapNetworkInterface() throws Exception {
+    public PcapHandle pcapHandle() throws Exception {
         PcapNetworkInterface pcapNetworkInterface;
 
         if (AUTO_SCAN) {
@@ -43,6 +45,9 @@ public class SniffConfig extends AbstractInitializer {
 
         log.debug("select pcapNetworkInterface : {}", pcapNetworkInterface);
 
-        return pcapNetworkInterface;
+        return pcapNetworkInterface.openLive(
+            SniffConstant.SNAPSHOT_BYTE_LENGTH,
+            SniffConstant.DEFAULT_PROMISCUOUS_MODE,
+            SniffConstant.READ_TIMEOUT_MILLISECOND);
     }
 }
