@@ -16,7 +16,7 @@ public final class CommonUtils {
             objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
             return Optional.of(objectMapper.writeValueAsString(map));
         } catch (Exception e) {
-            log.error("Map 변환 오류", e);
+            log.error("Map Convert Error", e);
             return Optional.empty();
         }
     }
