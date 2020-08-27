@@ -20,6 +20,6 @@ public class TcpSniffService {
           log.info("packet : {}, time : {}", p, pcapHandle.getTimestamp());
         };
 
-        pcapHandle.loop(5, packetListener);
+        pcapHandle.loop(-1, packetListener);
     }
 }
