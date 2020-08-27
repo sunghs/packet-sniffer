@@ -18,6 +18,7 @@ public class ThreadPoolConfig extends AbstractInitializer {
 
     @Setter
     private ThreadProperty producer;
+
     @Setter
     private ThreadProperty consumer;
 
