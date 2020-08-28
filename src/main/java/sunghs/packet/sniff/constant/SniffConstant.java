@@ -1,5 +1,6 @@
 package sunghs.packet.sniff.constant;
 
+import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 
 public interface SniffConstant {
@@ -9,4 +10,6 @@ public interface SniffConstant {
     int READ_TIMEOUT_MILLISECOND = 2 * 100;
 
     PromiscuousMode DEFAULT_PROMISCUOUS_MODE = PromiscuousMode.PROMISCUOUS;
+
+    BpfCompileMode DEFAULT_FILTER_MODE = BpfCompileMode.OPTIMIZE;
 }

@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import sunghs.packet.sniff.service.TcpSniffService;
+import sunghs.packet.sniff.service.PacketSniffService;
 
 @RequiredArgsConstructor
 @SpringBootApplication
 public class PacketSnifferApplication implements CommandLineRunner {
 
-    private final TcpSniffService tcpSniffService;
+    private final PacketSniffService packetSniffService;
 
     public static void main(String[] args) {
         SpringApplication.run(PacketSnifferApplication.class, args);
@@ -18,6 +18,6 @@ public class PacketSnifferApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        tcpSniffService.sniff();
+        packetSniffService.listen();
     }
 }

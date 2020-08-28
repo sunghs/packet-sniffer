@@ -4,8 +4,9 @@ import lombok.Getter;
 
 public enum SniffType {
 
-    TCP("TCP"),
-    HTTP("HTTP");
+    TCP("tcp"),
+    HTTP("tcp port 80"),
+    HTTPS("tcp port 443"),;
 
     @Getter
     private final String typeName;
