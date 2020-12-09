@@ -1,6 +1,5 @@
 package sunghs.packet.sniff.service;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.pcap4j.core.NotOpenException;
@@ -15,8 +14,11 @@ import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.util.MacAddress;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import sunghs.packet.sniff.constant.SniffConstant;
 import sunghs.packet.sniff.constant.SniffType;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -26,9 +28,10 @@ public class PacketSniffService {
     private final PcapHandle pcapHandle;
 
     private List<Packet> parsePacket(Packet packet) {
-        // EthernetPacket -> IpV4Packet -> TcpPacket -> UnknownPacket
-        while (!(packet instanceof UnknownPacket)) {
-            log.info(packet.getClass().getCanonicalName());
+        // encapsulation packet header
+        // EthernetPacketHeader -> IpV4PacketHeader -> TcpPacketHeader -> Data
+        while (!ObjectUtils.isEmpty(packet) && !(packet instanceof UnknownPacket)) {
+            log.info(packet.getClass().getCanonicalName() + ", {}", packet.toString());
             packet = packet.getPayload();
         }
         return null;

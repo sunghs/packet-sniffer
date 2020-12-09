@@ -12,3 +12,16 @@ side project packet-sniffer
 - Gradle : 6.4.1
 
 입니다.
+
+
+## OS 별 sniff 확인점
+### Windows
+아래 링크의 Winpcap 을 설치해 줘야 합니다.  
+https://www.winpcap.org/install/default.htm
+
+### Unix, Linux, MacOS
+권한을 찾을 수 없다는 에러가 발생하면 아래 명령어를 추가합니다.  
+```
+sudo chown <USER> /dev/bpf*
+```
+pcap 권한을 유저로 가져와야 합니다.  

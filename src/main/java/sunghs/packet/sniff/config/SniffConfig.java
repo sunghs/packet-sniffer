@@ -1,6 +1,5 @@
 package sunghs.packet.sniff.config;
 
-import java.util.List;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +11,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import sunghs.packet.sniff.constant.SniffConstant;
+
+import java.util.List;
 
 @ConfigurationProperties(prefix = "sniff.listen")
 @Configuration
@@ -37,6 +38,7 @@ public class SniffConfig extends AbstractInitializer {
         PcapNetworkInterface pcapNetworkInterface;
 
         if (AUTO_SCAN) {
+            // IP를 특정할 수 없기 때문에 AUTO-SCAN 형태로 사용
             pcapNetworkInterface = new NifSelector().selectNetworkInterface();
         } else {
             List<PcapNetworkInterface> list = Pcaps.findAllDevs();
