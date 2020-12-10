@@ -1,12 +1,24 @@
+import java.nio.charset.StandardCharsets
+
+buildscript {
+    ext {
+        name = "packet-sniffer"
+        group = "sunghs.packet.sniff"
+        version = "1.0.0-SNAPSHOT"
+        javaVersion = JavaVersion.VERSION_11
+    }
+    repositories {
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '2.3.2.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
 }
 
-group = 'sunghs.packet.sniff'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = "${javaVersion}"
+targetCompatibility = "${javaVersion}"
 
 configurations {
     compileOnly {
@@ -16,6 +28,10 @@ configurations {
 
 repositories {
     mavenCentral()
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = StandardCharsets.UTF_8.name()
 }
 
 dependencies {
