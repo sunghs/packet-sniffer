@@ -1,5 +1,6 @@
 package sunghs.packet.sniff.config;
 
+import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,10 @@ public class SniffConfig extends AbstractInitializer {
 
     @Setter
     private int index;
+
+    @Setter
+    @Getter
+    private boolean requiredData;
 
     @Override
     public void initialize() {

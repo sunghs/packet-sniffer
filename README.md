@@ -24,4 +24,4 @@ https://www.winpcap.org/install/default.htm
 ```
 sudo chown <USER> /dev/bpf*
 ```
-pcap 권한을 유저로 가져와야 합니다.  
+확장 BPF의 pcap 권한을 유저로 가져와야 합니다.

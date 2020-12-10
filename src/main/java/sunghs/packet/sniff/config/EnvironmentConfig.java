@@ -1,7 +1,6 @@
 package sunghs.packet.sniff.config;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -24,8 +23,7 @@ public class EnvironmentConfig extends AbstractInitializer {
 
     @Override
     protected void initialize() {
-        for (Iterator<PropertySource<?>> it = ((AbstractEnvironment) environment).getPropertySources().iterator(); it.hasNext(); ) {
-            PropertySource<?> propertySource = it.next();
+        for (PropertySource<?> propertySource : ((AbstractEnvironment) environment).getPropertySources()) {
             if (propertySource instanceof MapPropertySource) {
                 environmentMap.putAll(((MapPropertySource) propertySource).getSource());
             }

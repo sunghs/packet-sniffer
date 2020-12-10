@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.Optional;
+import org.springframework.util.ObjectUtils;
 
 @Slf4j
 public final class CommonUtils {
@@ -19,5 +20,9 @@ public final class CommonUtils {
             log.error("Map Convert Error", e);
             return Optional.empty();
         }
+    }
+
+    public static boolean isNotEmpty(Object obj) {
+        return !ObjectUtils.isEmpty(obj);
     }
 }

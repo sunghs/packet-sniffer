@@ -2,16 +2,18 @@ package sunghs.packet.sniff.model;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.pcap4j.packet.Packet;
-import org.pcap4j.packet.Packet.Header;
+import lombok.ToString;
 
 @Builder
 @Getter
+@ToString
 public class TcpInfo {
 
-    private final Header header;
+    private final String sourcePort;
 
-    private final Packet packet;
+    private final String destPort;
 
-    private final String time;
+    private final long seqNumber;
+
+    private final long ackNumber;
 }
