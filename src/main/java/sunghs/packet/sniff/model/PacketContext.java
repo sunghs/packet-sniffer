@@ -1,11 +1,15 @@
 package sunghs.packet.sniff.model;
 
 import lombok.Data;
+import sunghs.packet.sniff.constant.PacketType;
+import sunghs.packet.sniff.constant.TransmissionDirection;
 
 @Data
 public class PacketContext {
 
-    public static final PacketContext EMPTY_CONTEXT = new PacketContext();
+    private TransmissionDirection transmissionDirection;
+
+    private PacketType packetType;
 
     private EthernetInfo ethernetInfo;
 

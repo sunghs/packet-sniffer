@@ -58,8 +58,8 @@ public class PacketParser {
         long ackNumber = tcpHeader.getAcknowledgmentNumberAsLong();
 
         return TcpInfo.builder()
-            .sourcePort(sourcePort.name())
-            .destPort(destPort.name())
+            .sourcePort(sourcePort.valueAsString())
+            .destPort(destPort.valueAsString())
             .seqNumber(seqNumber)
             .ackNumber(ackNumber)
             .build();

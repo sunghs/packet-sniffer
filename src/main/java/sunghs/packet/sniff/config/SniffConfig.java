@@ -1,5 +1,6 @@
 package sunghs.packet.sniff.config;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,8 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import sunghs.packet.sniff.constant.SniffConstant;
-
-import java.util.List;
+import sunghs.packet.sniff.exception.SniffHandlerException;
 
 @ConfigurationProperties(prefix = "sniff.listen")
 @Configuration
@@ -21,17 +21,17 @@ import java.util.List;
 @ToString
 public class SniffConfig extends AbstractInitializer {
 
-    private static final boolean AUTO_SCAN = true;
-
     @Setter
+    @Getter
     private String ip;
-
-    @Setter
-    private int index;
 
     @Setter
     @Getter
     private boolean requiredData;
+
+    @Setter
+    @Getter
+    private boolean autoScan;
 
     @Override
     public void initialize() {
@@ -42,12 +42,26 @@ public class SniffConfig extends AbstractInitializer {
     public PcapHandle pcapHandle() throws Exception {
         PcapNetworkInterface pcapNetworkInterface;
 
-        if (AUTO_SCAN) {
-            // IP를 특정할 수 없기 때문에 AUTO-SCAN 형태로 사용
-            pcapNetworkInterface = new NifSelector().selectNetworkInterface();
-        } else {
+        if (isAutoScan()) {
             List<PcapNetworkInterface> list = Pcaps.findAllDevs();
-            pcapNetworkInterface = list.get(5);
+
+            int selectIdx = -1;
+
+            for (int i = 0; i < list.size(); i++) {
+                PcapNetworkInterface pni = list.get(i);
+                if (pni.getAddresses().stream().anyMatch(address ->
+                    ip.contains(address.getAddress().getHostAddress()))) {
+                    selectIdx = i;
+                    break;
+                }
+            }
+
+            if (selectIdx < 0) {
+                throw new SniffHandlerException("device 를 찾지 못 했습니다.");
+            }
+            pcapNetworkInterface = list.get(selectIdx);
+        } else {
+            pcapNetworkInterface = new NifSelector().selectNetworkInterface();
         }
 
         log.debug("select pcapNetworkInterface : {}", pcapNetworkInterface);

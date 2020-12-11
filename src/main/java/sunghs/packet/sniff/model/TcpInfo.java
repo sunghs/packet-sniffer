@@ -9,6 +9,8 @@ import lombok.ToString;
 @ToString
 public class TcpInfo {
 
+    private final String tcpType;
+
     private final String sourcePort;
 
     private final String destPort;
