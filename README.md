@@ -25,3 +25,9 @@ https://www.winpcap.org/install/default.htm
 sudo chown <USER> /dev/bpf*
 ```
 확장 BPF의 pcap 권한을 유저로 가져와야 합니다.
+
+### 사용법
+#### 자동 ip 선택 모드
+application.yml 의 sniff.listen.ip 의 값을 패킷 스니핑 할 ip를 적고 start 하시면 됩니다.
+#### 수동 ip 선택 모드
+sniff.listen.auto-scan 의 값을 false 로 변경 후 구동 시 console 에 ip list를 보여줍니다.
