@@ -24,7 +24,7 @@ logging:
 ########################################
 sniff:
   listen:
-    ip: 10.200.195.98
+    ip: 127.0.0.1
     required-data: true
     auto-scan: true
 
