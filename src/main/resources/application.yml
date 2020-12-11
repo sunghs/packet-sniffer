@@ -4,7 +4,7 @@
 logging:
   level:
     org: info
-    sunghs: debug
+    sunghs: info
   file:
     name: /logs/sniff.log
     max-size: 100MB
@@ -26,7 +26,8 @@ sniff:
   listen:
     ip: 127.0.0.1
     required-data: true
-    auto-scan: true
+    auto-scan: false
+    capture-level: ethernet
 
 ########################################
 # THREAD CONFIG

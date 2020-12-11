@@ -12,6 +12,7 @@ import org.pcap4j.util.NifSelector;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import sunghs.packet.sniff.constant.PacketType;
 import sunghs.packet.sniff.constant.SniffConstant;
 import sunghs.packet.sniff.exception.SniffHandlerException;
 
@@ -21,17 +22,21 @@ import sunghs.packet.sniff.exception.SniffHandlerException;
 @ToString
 public class SniffConfig extends AbstractInitializer {
 
-    @Setter
     @Getter
+    @Setter
     private String ip;
 
-    @Setter
     @Getter
+    @Setter
     private boolean requiredData;
 
-    @Setter
     @Getter
+    @Setter
     private boolean autoScan;
+
+    @Getter
+    @Setter
+    private PacketType captureLevel;
 
     @Override
     public void initialize() {

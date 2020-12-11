@@ -13,6 +13,7 @@ import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
 import org.pcap4j.packet.namednumber.TcpPort;
 import org.pcap4j.util.MacAddress;
+import sunghs.packet.sniff.constant.SniffType;
 import sunghs.packet.sniff.model.EthernetInfo;
 import sunghs.packet.sniff.model.Ipv4Info;
 import sunghs.packet.sniff.model.TcpInfo;
@@ -57,9 +58,23 @@ public class PacketParser {
         long seqNumber = tcpHeader.getSequenceNumberAsLong();
         long ackNumber = tcpHeader.getAcknowledgmentNumberAsLong();
 
+        int sPort = sourcePort.valueAsInt();
+        int dPort = destPort.valueAsInt();
+
+        SniffType tcpType;
+
+        if (sPort == SniffType.HTTPS.getPort() || dPort == SniffType.HTTPS.getPort()) {
+            tcpType = SniffType.HTTPS;
+        } else if (sPort == SniffType.HTTP.getPort() || dPort == SniffType.HTTP.getPort()) {
+            tcpType = SniffType.HTTP;
+        } else {
+            tcpType = SniffType.TCP;
+        }
+
         return TcpInfo.builder()
-            .sourcePort(sourcePort.valueAsString())
-            .destPort(destPort.valueAsString())
+            .tcpType(tcpType)
+            .sourcePort(sPort)
+            .destPort(dPort)
             .seqNumber(seqNumber)
             .ackNumber(ackNumber)
             .build();

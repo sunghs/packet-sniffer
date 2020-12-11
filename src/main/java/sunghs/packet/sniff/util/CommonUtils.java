@@ -23,7 +23,7 @@ public final class CommonUtils {
         }
     }
 
-    public static boolean isNotEmpty(Object obj) {
+    public static boolean isNotEmpty(final Object obj) {
         return !ObjectUtils.isEmpty(obj);
     }
 

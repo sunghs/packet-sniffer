@@ -20,6 +20,7 @@ import sunghs.packet.sniff.constant.SniffType;
 import sunghs.packet.sniff.constant.TransmissionDirection;
 import sunghs.packet.sniff.model.Ipv4Info;
 import sunghs.packet.sniff.model.PacketContext;
+import sunghs.packet.sniff.model.TcpInfo;
 import sunghs.packet.sniff.util.CommonUtils;
 import sunghs.packet.sniff.util.PacketParser;
 
@@ -58,14 +59,18 @@ public class PacketSniffService {
         // encapsulation packet header
         // EthernetPacketHeader -> IpV4PacketHeader -> TcpPacketHeader -> Data
         while (CommonUtils.isNotEmpty(packet)) {
-            if (packet instanceof EthernetPacket) {
+            if (packet.contains(EthernetPacket.class)) {
                 packetContext.setEthernetInfo(PacketParser.parse((EthernetPacket) packet));
-            } else if (packet instanceof IpV4Packet) {
+            } else if (packet.contains(IpV4Packet.class)) {
                 Ipv4Info ipv4Info = PacketParser.parse((IpV4Packet) packet);
                 packetContext.setIpv4Info(ipv4Info);
                 packetContext.setTransmissionDirection(getDirection(ipv4Info));
-            } else if (packet instanceof TcpPacket) {
-                packetContext.setTcpInfo(PacketParser.parse((TcpPacket) packet));
+            } else if (packet.contains(TcpPacket.class)) {
+                TcpInfo tcpInfo = PacketParser.parse((TcpPacket) packet);
+                if (tcpInfo.getTcpType() != SniffType.HTTP) {
+                    break;
+                }
+                packetContext.setTcpInfo(tcpInfo);
             } else {
                 String hex = ((UnknownPacket) packet).toHexString();
                 String data = CommonUtils.hexToString(hex);
@@ -80,13 +85,13 @@ public class PacketSniffService {
     public void listen() throws PcapNativeException, NotOpenException, InterruptedException {
         PacketListener packetListener = packet -> {
             PacketContext packetContext;
-            if (packet instanceof EthernetPacket) {
+            if (packet.contains(EthernetPacket.class)) {
                 log.debug("ETHERNET PACKET CAPTURE");
                 packetContext = parsePacket(packet, PacketType.ETHERNET);
-            } else if (packet instanceof IpV4Packet) {
+            } else if (packet.contains(IpV4Packet.class)) {
                 log.debug("IPV4 PACKET CAPTURE");
                 packetContext = parsePacket(packet, PacketType.IPV4);
-            } else if (packet instanceof TcpPacket) {
+            } else if (packet.contains(TcpPacket.class)) {
                 log.debug("TCP PACKET CAPTURE");
                 packetContext = parsePacket(packet, PacketType.TCP);
             } else {
@@ -95,8 +100,8 @@ public class PacketSniffService {
             }
 
             // TODO Persistent System
-            if(CommonUtils.isNotEmpty(packetContext)) {
-                log.debug("{}", packetContext);
+            if (CommonUtils.isNotEmpty(packetContext)) {
+                log.info("{}", packetContext);
             }
         };
         pcapHandle.setFilter(SniffType.TCP.getTypeName(), SniffConstant.DEFAULT_FILTER_MODE);
