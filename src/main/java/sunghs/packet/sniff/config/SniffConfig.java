@@ -62,7 +62,7 @@ public class SniffConfig extends AbstractInitializer {
             }
 
             if (selectIdx < 0) {
-                throw new SniffHandlerException("device 를 찾지 못 했습니다.");
+                throw new SniffHandlerException("device 를 찾을 수 없음.");
             }
             pcapNetworkInterface = list.get(selectIdx);
         } else {

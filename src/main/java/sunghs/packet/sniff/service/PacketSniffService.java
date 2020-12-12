@@ -73,8 +73,8 @@ public class PacketSniffService {
                 packetContext.setTcpInfo(tcpInfo);
             } else {
                 String hex = ((UnknownPacket) packet).toHexString();
-                String data = CommonUtils.hexToString(hex);
-                packetContext.setData(data);
+                // String data = CommonUtils.hexToString(hex);
+                packetContext.setData(hex);
             }
             packet = packet.getPayload();
         }
