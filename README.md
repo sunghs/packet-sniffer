@@ -21,6 +21,7 @@ https://www.winpcap.org/install/default.htm
 
 ### Unix, Linux, MacOS
 권한을 찾을 수 없다는 에러가 발생하면 아래 명령어를 추가합니다.  
+(You don't have permission to capture on that device ((cannot open BPF device) /dev/bpf0: Permission denied))
 ```
 sudo chown <USER> /dev/bpf*
 ```
