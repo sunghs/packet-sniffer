@@ -6,21 +6,15 @@ import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PacketListener;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
-import org.pcap4j.packet.EthernetPacket;
-import org.pcap4j.packet.IpV4Packet;
-import org.pcap4j.packet.Packet;
-import org.pcap4j.packet.TcpPacket;
-import org.pcap4j.packet.UnknownPacket;
+import org.pcap4j.packet.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import sunghs.packet.sniff.config.SniffConfig;
 import sunghs.packet.sniff.constant.PacketType;
 import sunghs.packet.sniff.constant.SniffConstant;
-import sunghs.packet.sniff.constant.SniffType;
 import sunghs.packet.sniff.constant.TransmissionDirection;
 import sunghs.packet.sniff.model.Ipv4Info;
 import sunghs.packet.sniff.model.PacketContext;
-import sunghs.packet.sniff.model.TcpInfo;
 import sunghs.packet.sniff.util.CommonUtils;
 import sunghs.packet.sniff.util.PacketParser;
 
@@ -66,14 +60,9 @@ public class PacketSniffService {
                 packetContext.setIpv4Info(ipv4Info);
                 packetContext.setTransmissionDirection(getDirection(ipv4Info));
             } else if (packet.contains(TcpPacket.class)) {
-                TcpInfo tcpInfo = PacketParser.parse((TcpPacket) packet);
-                if (tcpInfo.getTcpType() != SniffType.HTTP) {
-                    break;
-                }
-                packetContext.setTcpInfo(tcpInfo);
+                packetContext.setTcpInfo(PacketParser.parse((TcpPacket) packet));
             } else {
                 String hex = ((UnknownPacket) packet).toHexString();
-                // String data = CommonUtils.hexToString(hex);
                 packetContext.setData(hex);
             }
             packet = packet.getPayload();
@@ -83,7 +72,7 @@ public class PacketSniffService {
     }
 
     public void listen() throws PcapNativeException, NotOpenException, InterruptedException {
-        PacketListener packetListener = packet -> {
+        final PacketListener packetListener = packet -> {
             PacketContext packetContext;
             if (packet.contains(EthernetPacket.class)) {
                 log.debug("ETHERNET PACKET CAPTURE");
@@ -104,7 +93,7 @@ public class PacketSniffService {
                 log.info("{}", packetContext);
             }
         };
-        pcapHandle.setFilter(SniffType.TCP.getTypeName(), SniffConstant.DEFAULT_FILTER_MODE);
+        pcapHandle.setFilter(sniffConfig.getCaptureType().getFilterCmd(), SniffConstant.DEFAULT_FILTER_MODE);
         pcapHandle.loop(-1, packetListener);
     }
 }

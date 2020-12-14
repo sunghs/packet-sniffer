@@ -5,7 +5,9 @@ import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 
 public interface SniffConstant {
 
-    int SNAPSHOT_BYTE_LENGTH = 65536;
+    int ONE_KILO_BYTE = 1024;
+
+    int SNAPSHOT_BYTE_LENGTH = ONE_KILO_BYTE * 1024;
 
     int READ_TIMEOUT_MILLISECOND = 2 * 100;
 

@@ -28,6 +28,7 @@ sniff:
     required-data: true
     auto-scan: false
     capture-level: ethernet
+    capture-type: http
 
 ########################################
 # THREAD CONFIG

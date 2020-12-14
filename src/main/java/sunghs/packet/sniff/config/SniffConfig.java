@@ -1,6 +1,5 @@
 package sunghs.packet.sniff.config;
 
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,7 +13,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import sunghs.packet.sniff.constant.PacketType;
 import sunghs.packet.sniff.constant.SniffConstant;
+import sunghs.packet.sniff.constant.SniffType;
 import sunghs.packet.sniff.exception.SniffHandlerException;
+
+import java.util.List;
 
 @ConfigurationProperties(prefix = "sniff.listen")
 @Configuration
@@ -37,6 +39,10 @@ public class SniffConfig extends AbstractInitializer {
     @Getter
     @Setter
     private PacketType captureLevel;
+
+    @Getter
+    @Setter
+    private SniffType captureType;
 
     @Override
     public void initialize() {
