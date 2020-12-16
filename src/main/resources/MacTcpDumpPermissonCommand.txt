@@ -1,3 +1,0 @@
-For Mac OS
-
-sudo chown <USER> /dev/bpf*

@@ -37,4 +37,24 @@ public final class CommonUtils {
         }
         return new String(bHex, StandardCharsets.UTF_8);
     }
+
+    public String convertBinary(String hex) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        byte[] bt = hex.getBytes(StandardCharsets.UTF_8);
+        for (int i = 0; i < bt.length; ++i) {
+            stringBuilder.append(shift(bt[i]));
+        }
+        return stringBuilder.toString();
+    }
+
+    private String shift(final byte n) {
+        StringBuilder sb = new StringBuilder("00000000");
+        for (int bit = 0; bit < 8; bit++) {
+            if (((n >> bit) & 1) > 0) {
+                sb.setCharAt(7 - bit, '1');
+            }
+        }
+        return sb.toString();
+    }
 }

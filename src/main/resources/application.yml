@@ -24,9 +24,9 @@ logging:
 ########################################
 sniff:
   listen:
-    ip: 127.0.0.1
+    ip: 0.0.0.0
     required-data: true
-    auto-scan: false
+    auto-scan: true
     capture-level: ethernet
     capture-type: http
 
