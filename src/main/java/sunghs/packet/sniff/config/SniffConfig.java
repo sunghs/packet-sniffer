@@ -44,6 +44,10 @@ public class SniffConfig extends AbstractInitializer {
     @Setter
     private SniffType captureType;
 
+    @Getter
+    @Setter
+    private boolean hexToString;
+
     @Override
     public void initialize() {
         super.check(SniffConfig.class, this);

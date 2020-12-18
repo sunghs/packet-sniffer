@@ -3,6 +3,7 @@
 ########################################
 logging:
   level:
+    root: info
     org: info
     sunghs: info
   file:
@@ -24,11 +25,12 @@ logging:
 ########################################
 sniff:
   listen:
-    ip: 0.0.0.0
+    ip: 192.168.200.101
     required-data: true
     auto-scan: true
     capture-level: ethernet
     capture-type: http
+    hex-to-string: true
 
 ########################################
 # THREAD CONFIG
