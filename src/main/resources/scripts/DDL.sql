@@ -1,0 +1,8 @@
+/**
+ * CREATE DATABASE
+ */
+CREATE SCHEMA packet;
+
+/**
+ * TABLE DDL SCRIPT
+ */
