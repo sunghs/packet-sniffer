@@ -3,10 +3,9 @@ package sunghs.packet.sniff.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import java.nio.charset.StandardCharsets;
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.Map;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ObjectUtils;
 
 @Slf4j
@@ -38,7 +37,7 @@ public final class CommonUtils {
         return new String(bHex, StandardCharsets.UTF_8);
     }
 
-    public String convertBinary(String hex) {
+    public static String convertBinary(String hex) {
         StringBuilder stringBuilder = new StringBuilder();
 
         byte[] bt = hex.getBytes(StandardCharsets.UTF_8);
@@ -48,7 +47,7 @@ public final class CommonUtils {
         return stringBuilder.toString();
     }
 
-    private String shift(final byte n) {
+    private static String shift(final byte n) {
         StringBuilder sb = new StringBuilder("00000000");
         for (int bit = 0; bit < 8; bit++) {
             if (((n >> bit) & 1) > 0) {
