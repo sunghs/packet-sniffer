@@ -1,4 +1,29 @@
 ########################################
+# SPRING CONFIG
+########################################
+spring:
+  application:
+    name: packet-sniffer
+  jpa:
+    database: mysql
+    generate-ddl: true
+    show-sql: true
+  datasource:
+    dbcp2:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:10000/packet?useUnicode=true&characterEncoding=utf-8
+      username: root
+      password: password
+      initial-size: 1
+      min-idle: 30
+      max-idle: 30
+      max-total: 30
+      validation-query: select 1 from dual
+      min-evictable-idle-time-millis: 12000
+      time-between-eviction-runs-millis: 60000
+      test-while-idle: true
+      test-on-borrow: true
+########################################
 # LOGBACK CONFIG
 ########################################
 logging:
@@ -7,18 +32,13 @@ logging:
     org: info
     sunghs: info
   file:
-    name: /logs/sniff.log
+    path: ${user.home}/pc
+    name: ${spring.application.name}.log
     max-size: 100MB
     max-history: 1
-
 ########################################
 # KAFKA CONFIG
 ########################################
-
-########################################
-# DATASOURCE CONFIG
-########################################
-
 
 ########################################
 # SNIFF CUSTOM CONFIG
@@ -27,11 +47,10 @@ sniff:
   listen:
     ip: 192.168.200.101
     required-data: true
-    auto-scan: true
+    auto-scan: false
     capture-level: ethernet
     capture-type: http
     hex-to-string: true
-
 ########################################
 # THREAD CONFIG
 ########################################
