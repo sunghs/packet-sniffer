@@ -1,6 +1,5 @@
 package sunghs.packet.sniff.model.entity;
 
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,29 +9,29 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import sunghs.packet.sniff.constant.PacketType;
-import sunghs.packet.sniff.constant.TransmissionDirection;
-import sunghs.packet.sniff.util.IdxGenerator;
 
 @Getter
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PacketHistory {
+public class Ipv4History {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long seq;
 
-    @Column(length = IdxGenerator.IDX_DIGIT)
-    private String idx;
+    @Column
+    private long packetHistorySeq;
 
     @Column
-    private TransmissionDirection transmissionDirection;
+    private String sourceIp;
 
     @Column
-    private PacketType packetType;
+    private String destIp;
 
     @Column
-    private LocalDateTime sniffTime;
+    private String protocol;
+
+    @Column
+    private String version;
 }
