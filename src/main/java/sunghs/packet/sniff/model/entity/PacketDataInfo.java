@@ -6,14 +6,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import sunghs.packet.sniff.constant.SniffConstant;
 
-@Getter
 @Entity
+@Getter
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PacketDataInfo {
 
@@ -25,5 +27,5 @@ public class PacketDataInfo {
     private long packetHistorySeq;
 
     @Column(length = SniffConstant.SNAPSHOT_BYTE_LENGTH)
-    private String data;
+    private String packetData;
 }

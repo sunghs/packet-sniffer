@@ -6,10 +6,13 @@ spring:
     name: packet-sniffer
   jpa:
     database: mysql
-    generate-ddl: true
+    generate-ddl: false
     show-sql: true
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
   datasource:
     dbcp2:
       driver-class-name: com.mysql.cj.jdbc.Driver
@@ -17,14 +20,17 @@ spring:
       username: root
       password: password
       initial-size: 1
-      min-idle: 30
-      max-idle: 30
-      max-total: 30
+      min-idle: 3
+      max-idle: 3
+      max-total: 3
       validation-query: select 1 from dual
       min-evictable-idle-time-millis: 12000
       time-between-eviction-runs-millis: 60000
       test-while-idle: true
       test-on-borrow: true
+  task:
+    execution:
+      thread-name-prefix: hs
 ########################################
 # LOGBACK CONFIG
 ########################################
@@ -53,17 +59,3 @@ sniff:
     capture-level: ethernet
     capture-type: http
     hex-to-string: true
-########################################
-# THREAD CONFIG
-########################################
-thread:
-  producer:
-    prefix: producer
-    core-pool-size: 10
-    max-pool-size: 50
-    capacity: 100
-  consumer:
-    prefix: consumer
-    core-pool-size: 10
-    max-pool-size: 50
-    capacity: 100

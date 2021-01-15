@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,9 +15,10 @@ import sunghs.packet.sniff.constant.PacketType;
 import sunghs.packet.sniff.constant.TransmissionDirection;
 import sunghs.packet.sniff.util.IdxGenerator;
 
-@Getter
 @Entity
+@Getter
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PacketHistory {
 

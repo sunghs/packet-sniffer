@@ -12,6 +12,7 @@ import sunghs.packet.sniff.model.ThreadProperty;
 
 @ConfigurationProperties(prefix = "thread")
 @Configuration
+//@EnableAsync
 @Slf4j
 @ToString
 public class ThreadPoolConfig extends AbstractInitializer {
@@ -27,23 +28,23 @@ public class ThreadPoolConfig extends AbstractInitializer {
         super.check(ThreadPoolConfig.class, this);
     }
 
-    @Bean(name = "producer")
-    public Executor setProducer() {
+    private Executor getExecutor(final ThreadProperty producer) {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(producer.getCorePoolSize());
         executor.setMaxPoolSize(producer.getMaxPoolSize());
         executor.setQueueCapacity(producer.getCapacity());
         executor.setThreadNamePrefix(producer.getPrefix());
+        executor.initialize();
         return executor;
+    }
+
+    @Bean(name = "producer")
+    public Executor setProducer() {
+        return getExecutor(producer);
     }
 
     @Bean(name = "consumer")
     public Executor setConsumer() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(consumer.getCorePoolSize());
-        executor.setMaxPoolSize(consumer.getMaxPoolSize());
-        executor.setQueueCapacity(consumer.getCapacity());
-        executor.setThreadNamePrefix(consumer.getPrefix());
-        return executor;
+        return getExecutor(consumer);
     }
 }
