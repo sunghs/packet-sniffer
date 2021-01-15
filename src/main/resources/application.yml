@@ -4,15 +4,21 @@
 spring:
   application:
     name: packet-sniffer
+  ########################################
+  # JPA CONFIG
+  ########################################
   jpa:
     database: mysql
     generate-ddl: false
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         globally_quoted_identifiers: true
+  ########################################
+  # DATABASE CONFIG
+  ########################################
   datasource:
     dbcp2:
       driver-class-name: com.mysql.cj.jdbc.Driver
@@ -28,9 +34,21 @@ spring:
       time-between-eviction-runs-millis: 60000
       test-while-idle: true
       test-on-borrow: true
-  task:
-    execution:
-      thread-name-prefix: hs
+  ########################################
+  # KAFKA CONFIG
+  ########################################
+  kafka:
+    bootstrap-servers: localhost:9092
+    template:
+      default-topic: packet
+    producer:
+      retries: 3
+    consumer:
+      group-id: consumer-1
+      auto-offset-reset: latest
+      enable-auto-commit: true
+      max-poll-records: 1000
+      auto-commit-interval: 10s
 ########################################
 # LOGBACK CONFIG
 ########################################
@@ -38,24 +56,34 @@ logging:
   level:
     root: info
     org: info
-    sunghs: info
+    sunghs: debug
   file:
     path: ${user.home}/pc
     name: ${spring.application.name}.log
     max-size: 100MB
     max-history: 1
 ########################################
-# KAFKA CONFIG
+# THREAD CONFIG
 ########################################
-
+thread:
+  producer:
+    prefix: producer
+    core-pool-size: 10
+    max-pool-size: 50
+    capacity: 10000
+  consumer:
+    prefix: consumer
+    core-pool-size: 1
+    max-pool-size: 1
+    capacity: 10000
 ########################################
 # SNIFF CUSTOM CONFIG
 ########################################
 sniff:
   listen:
-    ip: 192.168.200.101
+    ip: 10.200.195.98
     required-data: true
-    auto-scan: false
+    auto-scan: true
     capture-level: ethernet
     capture-type: http
     hex-to-string: true

@@ -1,0 +1,34 @@
+version: '3.8'
+
+networks:
+  dev:
+
+services:
+  zookeeper:
+    container_name: zookeeper
+    image: wurstmeister/zookeeper
+    ports:
+      - '2181:2181'
+    networks:
+      - dev
+  kafka:
+    container_name: kafka
+    image: wurstmeister/kafka
+    environment:
+      KAFKA_BROKER_ID: 1
+      # 토픽명:파티션수:레플리카수:정책
+      KAFKA_CREATE_TOPICS: "packet:1:1:compact"
+      # missing mandatory config: KAFKA_ZOOKEEPER_CONNECT
+      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      # ERROR: No listener or advertised hostname configuration provided in environment.
+      # Please define KAFKA_LISTENERS / (deprecated) KAFKA_ADVERTISED_HOST_NAME
+      # KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:19092
+      # KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+    ports:
+      - '9092:9092'
+    depends_on:
+      - zookeeper
+    networks:
+      - dev

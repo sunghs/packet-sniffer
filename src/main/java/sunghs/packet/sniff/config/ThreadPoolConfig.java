@@ -7,14 +7,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import sunghs.packet.sniff.model.ThreadProperty;
+import sunghs.packet.sniff.config.model.ThreadProperty;
 
-@ConfigurationProperties(prefix = "thread")
-@Configuration
-//@EnableAsync
+@EnableAsync
 @Slf4j
 @ToString
+@Configuration
+@ConfigurationProperties(prefix = "thread")
 public class ThreadPoolConfig extends AbstractInitializer {
 
     @Setter

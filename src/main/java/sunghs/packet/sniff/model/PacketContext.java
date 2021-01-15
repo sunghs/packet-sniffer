@@ -3,9 +3,10 @@ package sunghs.packet.sniff.model;
 import lombok.Data;
 import sunghs.packet.sniff.constant.PacketType;
 import sunghs.packet.sniff.constant.TransmissionDirection;
+import sunghs.packet.sniff.model.marker.KafkaEntity;
 
 @Data
-public class PacketContext {
+public class PacketContext implements KafkaEntity {
 
     private TransmissionDirection transmissionDirection;
 
