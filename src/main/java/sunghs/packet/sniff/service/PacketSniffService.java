@@ -19,7 +19,6 @@ import sunghs.packet.sniff.constant.SniffConstant;
 import sunghs.packet.sniff.constant.TransmissionDirection;
 import sunghs.packet.sniff.model.Ipv4Info;
 import sunghs.packet.sniff.model.PacketContext;
-import sunghs.packet.sniff.model.marker.KafkaEntity;
 import sunghs.packet.sniff.util.CommonUtils;
 import sunghs.packet.sniff.util.PacketParser;
 
@@ -32,7 +31,7 @@ public class PacketSniffService {
 
     private final SniffConfig sniffConfig;
 
-    private final QueueService<KafkaEntity> queueService;
+    private final KafkaClient kafkaClient;
 
     private TransmissionDirection getDirection(final Ipv4Info ipv4Info) {
         String source = ipv4Info.getSourceIp();
@@ -99,7 +98,7 @@ public class PacketSniffService {
             }
 
             if (CommonUtils.isNotEmpty(packetContext)) {
-                queueService.send(packetContext);
+                kafkaClient.send(packetContext);
             }
         };
         pcapHandle.setFilter(sniffConfig.getCaptureType().getFilterCmd(), SniffConstant.DEFAULT_FILTER_MODE);

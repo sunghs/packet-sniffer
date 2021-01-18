@@ -38,17 +38,19 @@ spring:
   # KAFKA CONFIG
   ########################################
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: localhost:10001
     template:
       default-topic: packet
     producer:
       retries: 3
+      bootstrap-servers: localhost:10001
     consumer:
       group-id: consumer-1
       auto-offset-reset: latest
       enable-auto-commit: true
       max-poll-records: 1000
       auto-commit-interval: 10s
+      bootstrap-servers: localhost:10001
 ########################################
 # LOGBACK CONFIG
 ########################################
