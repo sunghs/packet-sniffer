@@ -26,6 +26,10 @@ public final class CommonUtils {
         return !ObjectUtils.isEmpty(obj);
     }
 
+    public static boolean isEmpty(final Object obj) {
+        return ObjectUtils.isEmpty(obj);
+    }
+
     public static String hexToString(String hex) {
         hex = hex.replaceAll(" ", "");
         int size = hex.length();

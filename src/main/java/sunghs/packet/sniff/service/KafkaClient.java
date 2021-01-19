@@ -2,22 +2,29 @@ package sunghs.packet.sniff.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import java.util.concurrent.CompletableFuture;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.kafka.support.SendResult;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
+import sunghs.packet.sniff.exception.ExceptionCodeManager;
+import sunghs.packet.sniff.exception.QueueServiceException;
+import sunghs.packet.sniff.model.PacketContext;
 import sunghs.packet.sniff.model.marker.KafkaEntity;
+import sunghs.packet.sniff.util.CommonUtils;
 import sunghs.packet.sniff.util.IdxGenerator;
 
 @RequiredArgsConstructor
@@ -25,20 +32,32 @@ import sunghs.packet.sniff.util.IdxGenerator;
 @Slf4j
 public class KafkaClient {
 
+    private static final String OBJECT_TYPE = "obj_type";
+
     private final Gson serializer = new GsonBuilder().create();
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Async("producer")
-    public <T extends KafkaEntity> void send(final T message) {
-        String messageKey = IdxGenerator.generate();
-        String messageBody = serializer.toJson(message);
-        ListenableFuture<SendResult<String, String>> future = kafkaTemplate.sendDefault(messageKey, messageBody);
-        future.addCallback(new ListenableFutureCallback<>() {
+    public <T extends KafkaEntity> void send(final T data) {
+        if (CommonUtils.isEmpty(data)) {
+            log.debug("data is empty");
+        }
+
+        Message<String> message = MessageBuilder
+            .withPayload(serializer.toJson(data))
+            .setHeader(KafkaHeaders.TOPIC, kafkaTemplate.getDefaultTopic())
+            .setHeader(KafkaHeaders.PARTITION_ID, 0)
+            .setHeader(KafkaHeaders.MESSAGE_KEY, IdxGenerator.generate())
+            .setHeader(KafkaClient.OBJECT_TYPE, data.getClass().getTypeName())
+            .build();
+
+        ListenableFuture<SendResult<String, String>> result = kafkaTemplate.send(message);
+        result.addCallback(new ListenableFutureCallback<>() {
             @Override
             public void onFailure(Throwable ex) {
-                // TODO Error Exception 다듬기
-                log.error("exception", ex);
+                QueueServiceException queueServiceException = new QueueServiceException(ExceptionCodeManager.KAFKA_PRODUCE_EXCEPTION, ex);
+                log.error("kafka message send error", queueServiceException);
             }
 
             @Override
@@ -51,17 +70,21 @@ public class KafkaClient {
 
     @Async("consumer")
     @KafkaListener(topics = "${spring.kafka.template.default-topic}")
-    public String subs(@Headers final MessageHeaders headers, @Payload final String message) {
+    public void subs(@Headers final MessageHeaders headers, @Payload final String message) {
         try {
-            log.debug("header : {}, body : {}", headers.toString(), message);
-            return CompletableFuture.completedFuture(message).get();
-        } catch (Exception e) {
-            log.error("kafka subs error", e);
-            return Strings.EMPTY;
-        }
-    }
+            String typeName = Objects.requireNonNull(headers.get(KafkaClient.OBJECT_TYPE)).toString();
+            Class<?> cz = ClassUtils.forName(typeName, ClassUtils.getDefaultClassLoader());
+            KafkaEntity kafkaEntity = (KafkaEntity) serializer.fromJson(message, cz);
 
-    public <T extends KafkaEntity> T convert(String message, Class<T> t) {
-        return serializer.fromJson(message, t);
+            if (kafkaEntity instanceof PacketContext) {
+                // TODO INSERT DB
+            } else {
+                QueueServiceException queueServiceException = new QueueServiceException(ExceptionCodeManager.UNKNOWN_MESSAGE_TYPE);
+                log.error("kafka message convert error", queueServiceException);
+            }
+        } catch (Exception ex) {
+            QueueServiceException queueServiceException = new QueueServiceException(ExceptionCodeManager.KAFKA_PRODUCE_EXCEPTION, ex);
+            log.error("kafka consume error", queueServiceException);
+        }
     }
 }

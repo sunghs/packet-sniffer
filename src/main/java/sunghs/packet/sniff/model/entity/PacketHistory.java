@@ -13,7 +13,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import sunghs.packet.sniff.constant.PacketType;
 import sunghs.packet.sniff.constant.TransmissionDirection;
-import sunghs.packet.sniff.model.marker.KafkaEntity;
 import sunghs.packet.sniff.util.IdxGenerator;
 
 @Entity
@@ -21,7 +20,7 @@ import sunghs.packet.sniff.util.IdxGenerator;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PacketHistory implements KafkaEntity {
+public class PacketHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

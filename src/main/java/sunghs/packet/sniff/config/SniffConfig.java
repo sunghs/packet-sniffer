@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import sunghs.packet.sniff.constant.PacketType;
 import sunghs.packet.sniff.constant.SniffConstant;
 import sunghs.packet.sniff.constant.SniffType;
+import sunghs.packet.sniff.exception.ExceptionCodeManager;
 import sunghs.packet.sniff.exception.SniffHandlerException;
 
 import java.util.List;
@@ -72,7 +73,7 @@ public class SniffConfig extends AbstractInitializer {
             }
 
             if (selectIdx < 0) {
-                throw new SniffHandlerException("device 를 찾을 수 없음.");
+                throw new SniffHandlerException(ExceptionCodeManager.FAIL_FIND_DEVICE);
             }
             pcapNetworkInterface = list.get(selectIdx);
         } else {

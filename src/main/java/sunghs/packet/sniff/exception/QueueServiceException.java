@@ -1,14 +1,16 @@
 package sunghs.packet.sniff.exception;
 
-public class QueueServiceException extends RuntimeException {
+public class QueueServiceException extends AbstractServiceException {
 
-    private static final String format = "메시지 큐 서비스에 문제가 생겼습니다.";
+    private Throwable ex;
 
-    public QueueServiceException() {
-        super(format);
+    public QueueServiceException(ExceptionCodeManager exceptionCodeManager) {
+        super(exceptionCodeManager);
+
     }
 
-    public QueueServiceException(final String message) {
-        super(format + " : " + message);
+    public QueueServiceException(ExceptionCodeManager exceptionCodeManager, Throwable ex) {
+        super(exceptionCodeManager);
+        this.ex = ex;
     }
 }
