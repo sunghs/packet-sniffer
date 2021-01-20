@@ -1,7 +1,6 @@
 package sunghs.packet.sniff.service;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +22,11 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 import sunghs.packet.sniff.exception.ExceptionCodeManager;
 import sunghs.packet.sniff.exception.QueueServiceException;
 import sunghs.packet.sniff.model.PacketContext;
+import sunghs.packet.sniff.model.entity.PacketHistory;
 import sunghs.packet.sniff.model.marker.KafkaEntity;
+import sunghs.packet.sniff.repository.PacketHistoryRepository;
 import sunghs.packet.sniff.util.CommonUtils;
+import sunghs.packet.sniff.util.EntityConverter;
 import sunghs.packet.sniff.util.IdxGenerator;
 
 @RequiredArgsConstructor
@@ -34,9 +36,11 @@ public class KafkaClient {
 
     private static final String OBJECT_TYPE = "obj_type";
 
-    private final Gson serializer = new GsonBuilder().create();
-
     private final KafkaTemplate<String, String> kafkaTemplate;
+
+    private final Gson gson;
+
+    private final PacketHistoryRepository packetHistoryRepository;
 
     @Async("producer")
     public <T extends KafkaEntity> void send(final T data) {
@@ -45,7 +49,7 @@ public class KafkaClient {
         }
 
         Message<String> message = MessageBuilder
-            .withPayload(serializer.toJson(data))
+            .withPayload(gson.toJson(data))
             .setHeader(KafkaHeaders.TOPIC, kafkaTemplate.getDefaultTopic())
             .setHeader(KafkaHeaders.PARTITION_ID, 0)
             .setHeader(KafkaHeaders.MESSAGE_KEY, IdxGenerator.generate())
@@ -73,18 +77,22 @@ public class KafkaClient {
     public void subs(@Headers final MessageHeaders headers, @Payload final String message) {
         try {
             String typeName = Objects.requireNonNull(headers.get(KafkaClient.OBJECT_TYPE)).toString();
+            String idx = (String) headers.get(KafkaHeaders.MESSAGE_KEY);
             Class<?> cz = ClassUtils.forName(typeName, ClassUtils.getDefaultClassLoader());
-            KafkaEntity kafkaEntity = (KafkaEntity) serializer.fromJson(message, cz);
+            KafkaEntity kafkaEntity = (KafkaEntity) gson.fromJson(message, cz);
 
             if (kafkaEntity instanceof PacketContext) {
                 // TODO INSERT DB
+                PacketHistory packetHistory = EntityConverter.toHistory(idx, (PacketContext) kafkaEntity);
+                packetHistoryRepository.save(packetHistory);
             } else {
                 QueueServiceException queueServiceException = new QueueServiceException(ExceptionCodeManager.UNKNOWN_MESSAGE_TYPE);
                 log.error("kafka message convert error", queueServiceException);
             }
         } catch (Exception ex) {
-            QueueServiceException queueServiceException = new QueueServiceException(ExceptionCodeManager.KAFKA_PRODUCE_EXCEPTION, ex);
+            QueueServiceException queueServiceException = new QueueServiceException(ExceptionCodeManager.KAFKA_CONSUME_EXCEPTION, ex);
             log.error("kafka consume error", queueServiceException);
+            log.error("cause {}", ex.getMessage());
         }
     }
 }

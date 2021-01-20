@@ -1,5 +1,8 @@
 package sunghs.packet.sniff.repository;
 
-public class PacketHistoryRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import sunghs.packet.sniff.model.entity.PacketHistory;
+
+public interface PacketHistoryRepository extends JpaRepository<PacketHistory, Long> {
 
 }
