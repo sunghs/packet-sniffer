@@ -6,7 +6,7 @@ CREATE SCHEMA packet;
 /**
  * TABLE DDL SCRIPT
  */
-CREATE TABLE packet_history (
+CREATE TABLE packet.packet_history (
     seq BIGINT NOT NULL AUTO_INCREMENT comment 'seq',
     idx VARCHAR(24) NOT NULL comment '고유 id',
     transmission_direction VARCHAR(16) comment '패킷 방향',
@@ -15,7 +15,7 @@ CREATE TABLE packet_history (
     PRIMARY KEY (seq)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment='패킷 이력';
 
-CREATE TABLE ethernet_history (
+CREATE TABLE packet.ethernet_history (
     seq BIGINT NOT NULL AUTO_INCREMENT comment 'seq',
     packet_history_seq BIGINT NOT NULL comment 'packet_history 의 참조 seq',
     source_address VARCHAR(255) comment '출발지 address',
@@ -24,7 +24,7 @@ CREATE TABLE ethernet_history (
     PRIMARY KEY (seq)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment='이더넷 이력';
 
-CREATE TABLE ipv4_history (
+CREATE TABLE packet.ipv4_history (
     seq BIGINT NOT NULL AUTO_INCREMENT comment 'seq',
     packet_history_seq BIGINT NOT NULL comment 'packet_history 의 참조 seq',
     source_ip VARCHAR(255) comment '출발지 ip',
@@ -34,7 +34,7 @@ CREATE TABLE ipv4_history (
     PRIMARY KEY (seq)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment='IPv4 이력';
 
-CREATE TABLE tcp_history (
+CREATE TABLE packet.tcp_history (
     seq BIGINT NOT NULL AUTO_INCREMENT comment 'seq',
     packet_history_seq BIGINT NOT NULL comment 'packet_history 의 참조 seq',
     tcp_type VARCHAR(16) comment 'TCP 캡쳐 타입',
@@ -45,11 +45,11 @@ CREATE TABLE tcp_history (
     PRIMARY KEY (seq)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment='TCP 이력';
 
-CREATE TABLE packet_data_info (
-        seq BIGINT NOT NULL AUTO_INCREMENT comment 'seq',
-        packet_history_seq BIGINT NOT NULL comment 'packet_history 의 참조 seq',
-        packet_data MEDIUMTEXT comment '패킷 데이터',
-        PRIMARY KEY (seq)
+CREATE TABLE packet.packet_data_info (
+    seq BIGINT NOT NULL AUTO_INCREMENT comment 'seq',
+    packet_history_seq BIGINT NOT NULL comment 'packet_history 의 참조 seq',
+    packet_data MEDIUMTEXT comment '패킷 데이터',
+    PRIMARY KEY (seq)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment='패킷 데이터 이력';
 
 COMMIT;
