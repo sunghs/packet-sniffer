@@ -1,17 +1,16 @@
 package sunghs.packet.sniff.service;
 
 import com.google.gson.Gson;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.RecordMetadata;
+import org.hibernate.exception.SQLGrammarException;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageHeaders;
-import org.springframework.messaging.handler.annotation.Headers;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.scheduling.annotation.Async;
@@ -74,21 +73,24 @@ public class KafkaClient {
 
     @Async("consumer")
     @KafkaListener(topics = "${spring.kafka.template.default-topic}")
-    public void subs(@Headers final MessageHeaders headers, @Payload final String message) {
+    public void subs(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partitionId, @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String messageKey,
+        @Header(KafkaClient.OBJECT_TYPE) String typeName, @Payload final String message) {
         try {
-            String typeName = Objects.requireNonNull(headers.get(KafkaClient.OBJECT_TYPE)).toString();
-            String idx = (String) headers.get(KafkaHeaders.MESSAGE_KEY);
             Class<?> cz = ClassUtils.forName(typeName, ClassUtils.getDefaultClassLoader());
             KafkaEntity kafkaEntity = (KafkaEntity) gson.fromJson(message, cz);
 
             if (kafkaEntity instanceof PacketContext) {
                 // TODO INSERT DB
-                PacketHistory packetHistory = EntityConverter.toHistory(idx, (PacketContext) kafkaEntity);
+                PacketHistory packetHistory = EntityConverter.toHistory(messageKey, (PacketContext) kafkaEntity);
+                log.info(packetHistory.toString());
                 packetHistoryRepository.save(packetHistory);
             } else {
                 QueueServiceException queueServiceException = new QueueServiceException(ExceptionCodeManager.UNKNOWN_MESSAGE_TYPE);
-                log.error("kafka message convert error", queueServiceException);
+                log.error("kafka {} partition {} key message convert error", partitionId, messageKey, queueServiceException);
             }
+        } catch (SQLGrammarException grammarException) {
+            QueueServiceException queueServiceException = new QueueServiceException(ExceptionCodeManager.KAFKA_DATA_PERSISTENCE_EXCEPTION, grammarException);
+            log.error("kafka data insert error", queueServiceException);
         } catch (Exception ex) {
             QueueServiceException queueServiceException = new QueueServiceException(ExceptionCodeManager.KAFKA_CONSUME_EXCEPTION, ex);
             log.error("kafka consume error", queueServiceException);
