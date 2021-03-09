@@ -45,6 +45,7 @@ public class KafkaClient {
     public <T extends KafkaEntity> void send(final T data) {
         if (CommonUtils.isEmpty(data)) {
             log.debug("data is empty");
+            return;
         }
 
         Message<String> message = MessageBuilder
