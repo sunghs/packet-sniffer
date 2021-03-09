@@ -40,8 +40,8 @@ CREATE TABLE packet.tcp_history (
     tcp_type VARCHAR(16) comment 'TCP 캡쳐 타입',
     source_port INT comment '출발지 port',
     dest_port INT comment '도착지 port',
-    seq_number INT comment 'sequence 번호, 현재 패킷의 위치',
-    ack_number INT comment 'acknowledgment 번호, 다음에 받을 패킷 위치',
+    seq_number BIGINT comment 'sequence 번호, 현재 패킷의 위치',
+    ack_number BIGINT comment 'acknowledgment 번호, 다음에 받을 패킷 위치',
     PRIMARY KEY (seq)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment='TCP 이력';
 

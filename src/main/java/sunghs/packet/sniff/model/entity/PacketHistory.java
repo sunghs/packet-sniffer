@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import sunghs.packet.sniff.constant.PacketType;
 import sunghs.packet.sniff.constant.TransmissionDirection;
 import sunghs.packet.sniff.util.IdxGenerator;
@@ -21,7 +20,6 @@ import sunghs.packet.sniff.util.IdxGenerator;
 @Entity
 @Getter
 @Builder
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PacketHistory {

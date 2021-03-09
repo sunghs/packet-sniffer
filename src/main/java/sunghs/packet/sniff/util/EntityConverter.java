@@ -31,7 +31,7 @@ public class EntityConverter {
             .build();
     }
 
-    public Ipv4History toHistory(Long seq, Ipv4Info ipv4Info) {
+    public static Ipv4History toHistory(Long seq, Ipv4Info ipv4Info) {
         return Ipv4History.builder()
             .packetHistorySeq(seq)
             .sourceIp(ipv4Info.getSourceIp())
@@ -41,7 +41,7 @@ public class EntityConverter {
             .build();
     }
 
-    public TcpHistory toHistory(Long seq, TcpInfo tcpInfo) {
+    public static TcpHistory toHistory(Long seq, TcpInfo tcpInfo) {
         return TcpHistory.builder()
             .packetHistorySeq(seq)
             .tcpType(tcpInfo.getTcpType())
@@ -52,7 +52,7 @@ public class EntityConverter {
             .build();
     }
 
-    public PacketDataInfo toDataInfo(Long seq, PacketContext packetContext) {
+    public static PacketDataInfo toDataInfo(Long seq, PacketContext packetContext) {
         return PacketDataInfo.builder()
             .packetHistorySeq(seq)
             .packetData(packetContext.getData())

@@ -2,6 +2,8 @@ package sunghs.packet.sniff.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,23 +23,25 @@ public class TcpHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long seq;
+    @Column(updatable = false, nullable = false)
+    private Long seq;
+
+    @Column(nullable = false)
+    private Long packetHistorySeq;
 
     @Column
-    private long packetHistorySeq;
-
-    @Column
+    @Enumerated(EnumType.STRING)
     private SniffType tcpType;
 
     @Column
-    private int sourcePort;
+    private Integer sourcePort;
 
     @Column
-    private int destPort;
+    private Integer destPort;
 
     @Column
-    private long seqNumber;
+    private Long seqNumber;
 
     @Column
-    private long ackNumber;
+    private Long ackNumber;
 }

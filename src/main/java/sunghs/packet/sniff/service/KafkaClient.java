@@ -21,11 +21,8 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 import sunghs.packet.sniff.exception.ExceptionCodeManager;
 import sunghs.packet.sniff.exception.QueueServiceException;
 import sunghs.packet.sniff.model.PacketContext;
-import sunghs.packet.sniff.model.entity.PacketHistory;
 import sunghs.packet.sniff.model.marker.KafkaEntity;
-import sunghs.packet.sniff.repository.PacketHistoryRepository;
 import sunghs.packet.sniff.util.CommonUtils;
-import sunghs.packet.sniff.util.EntityConverter;
 import sunghs.packet.sniff.util.IdxGenerator;
 
 @RequiredArgsConstructor
@@ -39,7 +36,7 @@ public class KafkaClient {
 
     private final Gson gson;
 
-    private final PacketHistoryRepository packetHistoryRepository;
+    private final DataSaveService dataSaveService;
 
     @Async("producer")
     public <T extends KafkaEntity> void send(final T data) {
@@ -80,10 +77,7 @@ public class KafkaClient {
             KafkaEntity kafkaEntity = (KafkaEntity) gson.fromJson(message, cz);
 
             if (kafkaEntity instanceof PacketContext) {
-                // TODO INSERT DB
-                PacketHistory packetHistory = EntityConverter.toHistory(messageKey, (PacketContext) kafkaEntity);
-                log.info(packetHistory.toString());
-                packetHistoryRepository.save(packetHistory);
+                dataSaveService.savePacketContext(messageKey, (PacketContext) kafkaEntity);
             } else {
                 QueueServiceException queueServiceException = new QueueServiceException(ExceptionCodeManager.UNKNOWN_MESSAGE_TYPE);
                 log.error("kafka {} partition {} key message convert error", partitionId, messageKey, queueServiceException);

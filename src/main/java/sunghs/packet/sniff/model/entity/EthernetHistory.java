@@ -20,10 +20,11 @@ public class EthernetHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long seq;
+    @Column(updatable = false, nullable = false)
+    private Long seq;
 
-    @Column
-    private long packetHistorySeq;
+    @Column(nullable = false)
+    private Long packetHistorySeq;
 
     @Column
     private String sourceAddress;
@@ -32,5 +33,5 @@ public class EthernetHistory {
     private String destAddress;
 
     @Column
-    private int headerLength;
+    private Integer headerLength;
 }

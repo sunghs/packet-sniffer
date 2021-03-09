@@ -21,10 +21,11 @@ public class PacketDataInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long seq;
+    @Column(updatable = false, nullable = false)
+    private Long seq;
 
-    @Column
-    private long packetHistorySeq;
+    @Column(nullable = false)
+    private Long packetHistorySeq;
 
     @Column(length = SniffConstant.SNAPSHOT_BYTE_LENGTH)
     private String packetData;
