@@ -39,14 +39,19 @@ spring:
   # KAFKA CONFIG
   ########################################
   kafka:
+    listener:
+      poll-timeout: 1s
+      concurrency: 10
     bootstrap-servers: localhost:10001
     template:
       default-topic: packet
     producer:
+      client-id: main-producer
       retries: 3
       bootstrap-servers: localhost:10001
+      compression-type: gzip
     consumer:
-      group-id: consumer-1
+      group-id: 1
       auto-offset-reset: latest
       enable-auto-commit: true
       max-poll-records: 1000
@@ -61,8 +66,7 @@ logging:
     org: info
     sunghs: debug
   file:
-    path: ${user.home}/pc
-    name: ${spring.application.name}.log
+    name: ${user.home}/pc/${spring.application.name}.log
     max-size: 100MB
     max-history: 1
 ########################################
@@ -90,3 +94,10 @@ sniff:
     capture-level: ethernet
     capture-type: http
     hex-to-string: true
+
+---
+spring:
+  profiles: dev
+---
+spring:
+  profiles: prd

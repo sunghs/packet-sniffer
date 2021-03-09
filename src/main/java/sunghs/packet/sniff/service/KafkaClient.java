@@ -47,7 +47,6 @@ public class KafkaClient {
             log.debug("data is empty");
             return;
         }
-
         Message<String> message = MessageBuilder
             .withPayload(gson.toJson(data))
             .setHeader(KafkaHeaders.TOPIC, kafkaTemplate.getDefaultTopic())
@@ -95,7 +94,6 @@ public class KafkaClient {
         } catch (Exception ex) {
             QueueServiceException queueServiceException = new QueueServiceException(ExceptionCodeManager.KAFKA_CONSUME_EXCEPTION, ex);
             log.error("kafka consume error", queueServiceException);
-            log.error("cause {}", ex.getMessage());
         }
     }
 }
