@@ -14,7 +14,7 @@ import sunghs.packet.sniff.constant.SniffConstant;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class RawPacketSniffService {
+public class RawPacketSniffService implements AbstractSniffService {
 
     private static final String RAW_PACKET_SEPARATOR = " ";
 
@@ -22,6 +22,7 @@ public class RawPacketSniffService {
 
     private final SniffConfig sniffConfig;
 
+    @Override
     public void listen() throws PcapNativeException, NotOpenException, InterruptedException {
         final RawPacketListener rawPacketListener = packet -> {
             String data = ByteArrays.toHexString(packet, RAW_PACKET_SEPARATOR);
