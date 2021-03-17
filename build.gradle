@@ -38,6 +38,7 @@ tasks.withType(JavaCompile) {
 dependencies {
     annotationProcessor('org.springframework.boot:spring-boot-configuration-processor')
     annotationProcessor('org.projectlombok:lombok')
+    testAnnotationProcessor('org.projectlombok:lombok')
     implementation('org.projectlombok:lombok')
 
     implementation('org.springframework.boot:spring-boot-starter')
@@ -57,9 +58,7 @@ dependencies {
     implementation('org.pcap4j:pcap4j-core:1.8.2')
     implementation('org.pcap4j:pcap4j-packetfactory-static:1.8.2')
 
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
 
 def querydslEnv = "$buildDir/generated/querydsl"
