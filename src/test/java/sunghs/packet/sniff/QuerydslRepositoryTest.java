@@ -13,8 +13,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import sunghs.packet.sniff.annotation.AllConfigurationTests;
-import sunghs.packet.sniff.model.entity.PacketHistory;
-import sunghs.packet.sniff.repository.support.PacketHistoryRepositorySupport;
+import sunghs.packet.sniff.model.entity.PacketHistoryDto;
+import sunghs.packet.sniff.repository.support.PacketRepositorySupport;
 
 @ActiveProfiles("local")
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -26,21 +26,36 @@ public class QuerydslRepositoryTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private PacketHistoryRepositorySupport packetHistoryRepositorySupport;
+    private PacketRepositorySupport packetRepositorySupport;
 
     @BeforeEach
     public void beforeEach() {
         final JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(entityManager);
-        this.packetHistoryRepositorySupport = new PacketHistoryRepositorySupport(jpaQueryFactory);
+        this.packetRepositorySupport = new PacketRepositorySupport(jpaQueryFactory);
     }
 
     @ParameterizedTest
     @ValueSource(longs = {
         200L, 300L, 400L, 500L, 600L
     })
-    public void findTest(Long seq) {
-        PacketHistory packetHistory = packetHistoryRepositorySupport.findBySeq(seq);
-        Assertions.assertEquals(packetHistory.getSeq(), seq);
-        log.info("seq {} idx {} time {}", packetHistory.getSeq(), packetHistory.getIdx(), packetHistory.getSniffTime());
+    public void findTestSeq(Long seq) {
+        PacketHistoryDto packetHistoryDto = packetRepositorySupport.findBySeq(seq);
+        Assertions.assertEquals(packetHistoryDto.getSeq(), seq);
+        log.info("packetHistoryDto : {}", packetHistoryDto.toString());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+        "0247c87b2baf44aeb6598fd7",
+        "ee4088984f94473496ca11a7",
+        "8ddf5b0e3f1a4be5a1b5ad27",
+        "8903be9316e04c0b994992aa",
+        "eb0e7aa1db6b4197a50b1b53",
+        "62b149e16f1149289b6d3796"
+    })
+    public void findTestMessageKey(String messageKey) {
+        PacketHistoryDto packetHistoryDto = packetRepositorySupport.findByMessageKey(messageKey);
+        Assertions.assertEquals(packetHistoryDto.getIdx(), messageKey);
+        log.info("packetHistoryDto : {}", packetHistoryDto.toString());
     }
 }
