@@ -1,8 +1,8 @@
 package sunghs.packet.sniff.service;
 
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sunghs.packet.sniff.model.PacketContext;
 import sunghs.packet.sniff.model.entity.EthernetHistory;
 import sunghs.packet.sniff.model.entity.Ipv4History;
@@ -30,7 +30,7 @@ public class DataSaveService {
 
     private final TcpHistoryRepository tcpHistoryRepository;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void savePacketContext(final String messageKey, final PacketContext packetContext) {
         PacketHistory packetHistory = EntityConverter.toHistory(messageKey, packetContext);
         Long packetHistorySeq = packetHistoryRepository.save(packetHistory).getSeq();
