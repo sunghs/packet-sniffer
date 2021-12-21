@@ -5,11 +5,11 @@ side project packet-sniffer
 
 혼자하는 사이드 프로젝트 겸 인/아웃바운드 패킷을 스니핑 하는 프로그램입니다.
 
-## 개발환경 (Dev Environment)
-- IDE : IntelliJ 2020.01
+## 개발환경 (Dev Environment) - 2021. 12. 05 updated
+- IDE : IntelliJ 2021.2.3
 - JDK : Amazon-corretto-11
-- SpringBoot : 2.3.2
-- Gradle : 6.4.1
+- SpringBoot : 2.6.0
+- Gradle : 7.3
 
 입니다.
 
