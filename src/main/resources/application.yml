@@ -97,7 +97,11 @@ sniff:
 
 ---
 spring:
-  profiles: dev
+  config:
+    activate:
+      on-profile: develop
 ---
 spring:
-  profiles: prd
+  config:
+    activate:
+      on-profile: production
