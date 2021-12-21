@@ -67,8 +67,10 @@ logging:
     sunghs: debug
   file:
     name: ${user.home}/pc/${spring.application.name}.log
-    max-size: 100MB
-    max-history: 1
+  logback:
+    rollingpolicy:
+      max-file-size: 100MB
+      max-history: 1
 ########################################
 # THREAD CONFIG
 ########################################
