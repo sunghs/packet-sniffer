@@ -1,8 +1,6 @@
 package sunghs.packet.sniff;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,16 +10,19 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
-import sunghs.packet.sniff.annotation.AllConfigurationTests;
+import sunghs.packet.sniff.config.AllConfigurationTests;
 import sunghs.packet.sniff.model.entity.PacketHistoryDto;
 import sunghs.packet.sniff.repository.support.PacketRepositorySupport;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @ActiveProfiles("local")
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @AllConfigurationTests
 @DataJpaTest
 @Slf4j
-public class QuerydslRepositoryTest {
+class QuerydslRepositoryTest {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -29,7 +30,7 @@ public class QuerydslRepositoryTest {
     private PacketRepositorySupport packetRepositorySupport;
 
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         final JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(entityManager);
         this.packetRepositorySupport = new PacketRepositorySupport(jpaQueryFactory);
     }
@@ -38,7 +39,7 @@ public class QuerydslRepositoryTest {
     @ValueSource(longs = {
         200L, 300L, 400L, 500L, 600L
     })
-    public void findTestSeq(Long seq) {
+    void findTestSeq(Long seq) {
         PacketHistoryDto packetHistoryDto = packetRepositorySupport.findBySeq(seq);
         Assertions.assertEquals(packetHistoryDto.getSeq(), seq);
         log.info("packetHistoryDto : {}", packetHistoryDto.toString());
@@ -53,7 +54,7 @@ public class QuerydslRepositoryTest {
         "eb0e7aa1db6b4197a50b1b53",
         "62b149e16f1149289b6d3796"
     })
-    public void findTestMessageKey(String messageKey) {
+    void findTestMessageKey(String messageKey) {
         PacketHistoryDto packetHistoryDto = packetRepositorySupport.findByMessageKey(messageKey);
         Assertions.assertEquals(packetHistoryDto.getIdx(), messageKey);
         log.info("packetHistoryDto : {}", packetHistoryDto.toString());

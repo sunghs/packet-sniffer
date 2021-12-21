@@ -8,10 +8,10 @@ import sunghs.packet.sniff.exception.SniffHandlerException;
 
 @RequiredArgsConstructor
 @Slf4j
-public class ErrorTest {
+class ErrorTest {
 
     @Test
-    public void errorTest() {
+    void errorTest() {
         SniffHandlerException sniffHandlerException = new SniffHandlerException(ExceptionCodeManager.FAIL_FIND_DEVICE);
         log.error("error", sniffHandlerException);
     }

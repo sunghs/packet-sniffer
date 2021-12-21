@@ -9,6 +9,12 @@ buildscript {
         springDependencyManagementVersion = "1.0.11.RELEASE"
         queryDslPluginVersion = "1.0.10"
         queryDslVersion = "5.0.0"
+        pcap4jVersion = "1.8.2"
+        gsonVersion = "2.8.6"
+        commonsCodecVersion = "1.9"
+        commonsLang3Version = "3.12.0"
+        jacksonVersion = "2.13.0"
+        lombokVersion = "1.18.22"
     }
 }
 
@@ -45,8 +51,6 @@ tasks.withType(JavaCompile) {
 dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     annotationProcessor("org.projectlombok:lombok")
-    testAnnotationProcessor("org.projectlombok:lombok")
-    implementation("org.projectlombok:lombok")
 
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -54,21 +58,20 @@ dependencies {
     implementation("org.springframework.kafka:spring-kafka")
     implementation("org.apache.kafka:kafka-streams")
     implementation("mysql:mysql-connector-java")
-    implementation("org.apache.commons:commons-lang3:3.12.0")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.0.1")
 
+    implementation("org.apache.commons:commons-lang3:${commonsLang3Version}")
+    implementation("commons-codec:commons-codec:${commonsCodecVersion}")
+    implementation("com.google.code.gson:gson:${gsonVersion}")
+    implementation("com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}")
+    implementation("org.projectlombok:lombok:${lombokVersion}")
 
-    implementation("commons-codec:commons-codec:1.9")
-    implementation("com.google.code.gson:gson:2.8.6") {
-        changing = true
-    }
-
-    implementation("org.pcap4j:pcap4j-core:1.8.2")
-    implementation("org.pcap4j:pcap4j-packetfactory-static:1.8.2")
+    implementation("org.pcap4j:pcap4j-core:${pcap4jVersion}")
+    implementation("org.pcap4j:pcap4j-packetfactory-static:${pcap4jVersion}")
 
     implementation("com.querydsl:querydsl-jpa:${queryDslVersion}")
     implementation("com.querydsl:querydsl-apt:${queryDslVersion}")
 
+    testAnnotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
