@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.pcap4j.core.PcapHandle;
+import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.Pcaps;
 import org.pcap4j.util.NifSelector;
@@ -58,33 +59,25 @@ public class SniffConfig extends AbstractInitializer {
     public PcapHandle pcapHandle() throws Exception {
         PcapNetworkInterface pcapNetworkInterface;
 
-        if (isAutoScan()) {
-            List<PcapNetworkInterface> list = Pcaps.findAllDevs();
-
-            int selectIdx = -1;
-
-            for (int i = 0; i < list.size(); i++) {
-                PcapNetworkInterface pni = list.get(i);
-                if (pni.getAddresses().stream().anyMatch(address ->
-                    ip.contains(address.getAddress().getHostAddress()))) {
-                    selectIdx = i;
-                    break;
-                }
-            }
-
-            if (selectIdx < 0) {
-                throw new SniffHandlerException(ExceptionCodeManager.FAIL_FIND_DEVICE);
-            }
-            pcapNetworkInterface = list.get(selectIdx);
-        } else {
-            pcapNetworkInterface = new NifSelector().selectNetworkInterface();
-        }
+        pcapNetworkInterface = isAutoScan() ?
+                getAutoNetworkInterface() : new NifSelector().selectNetworkInterface();
 
         log.debug("select pcapNetworkInterface : {}", pcapNetworkInterface);
 
         return pcapNetworkInterface.openLive(
-            SniffConstant.SNAPSHOT_BYTE_LENGTH,
-            SniffConstant.DEFAULT_PROMISCUOUS_MODE,
-            SniffConstant.READ_TIMEOUT_MILLISECOND);
+                SniffConstant.SNAPSHOT_BYTE_LENGTH,
+                SniffConstant.DEFAULT_PROMISCUOUS_MODE,
+                SniffConstant.READ_TIMEOUT_MILLISECOND);
+    }
+
+    private PcapNetworkInterface getAutoNetworkInterface() throws PcapNativeException {
+        List<PcapNetworkInterface> list = Pcaps.findAllDevs();
+
+        for (PcapNetworkInterface pni : list) {
+            if (pni.getAddresses().stream().anyMatch(address -> ip.contains(address.getAddress().getHostAddress()))) {
+                return pni;
+            }
+        }
+        throw new SniffHandlerException(ExceptionCodeManager.FAIL_FIND_DEVICE);
     }
 }

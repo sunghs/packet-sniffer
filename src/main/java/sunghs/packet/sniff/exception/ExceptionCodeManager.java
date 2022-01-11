@@ -14,10 +14,10 @@ public enum ExceptionCodeManager {
     ERROR("9999", "기타 에러");
 
     @Getter
-    private String code;
+    private final String code;
 
     @Getter
-    private String cause;
+    private final String cause;
 
     ExceptionCodeManager(String code, String cause) {
         this.code = code;

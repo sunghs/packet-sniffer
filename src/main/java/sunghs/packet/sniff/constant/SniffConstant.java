@@ -14,6 +14,4 @@ public interface SniffConstant {
     PromiscuousMode DEFAULT_PROMISCUOUS_MODE = PromiscuousMode.PROMISCUOUS;
 
     BpfCompileMode DEFAULT_FILTER_MODE = BpfCompileMode.OPTIMIZE;
-
-    String S = "asd";
 }

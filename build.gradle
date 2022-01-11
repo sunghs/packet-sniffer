@@ -100,3 +100,11 @@ compileQuerydsl {
 test {
     useJUnitPlatform()
 }
+
+bootRun {
+    dependsOn test
+}
+
+bootJar {
+    dependsOn test
+}

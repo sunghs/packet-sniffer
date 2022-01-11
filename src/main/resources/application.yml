@@ -6,6 +6,8 @@ spring:
     name: packet-sniffer
   profiles:
     active: local
+  main:
+    web-application-type: none
   ########################################
   # JPA CONFIG
   ########################################
@@ -102,8 +104,18 @@ spring:
   config:
     activate:
       on-profile: develop
+logging:
+  level:
+    root: info
+    org: info
+    sunghs: info
 ---
 spring:
   config:
     activate:
       on-profile: production
+logging:
+  level:
+    root: error
+    org: error
+    sunghs: error

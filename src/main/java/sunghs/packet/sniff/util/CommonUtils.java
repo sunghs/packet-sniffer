@@ -2,11 +2,12 @@ package sunghs.packet.sniff.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ObjectUtils;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.ObjectUtils;
 
 @Slf4j
 public final class CommonUtils {
@@ -45,8 +46,8 @@ public final class CommonUtils {
         StringBuilder stringBuilder = new StringBuilder();
 
         byte[] bt = hex.getBytes(StandardCharsets.UTF_8);
-        for (int i = 0; i < bt.length; ++i) {
-            stringBuilder.append(shift(bt[i]));
+        for (byte b : bt) {
+            stringBuilder.append(shift(b));
         }
         return stringBuilder.toString();
     }
